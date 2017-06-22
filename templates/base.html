@@ -17,6 +17,12 @@
   {% endif %}
   {% endwith %}
 
+  {% if 'user_email' in session %}
+    <a href="/logout">Logout</a>
+    {% else %}
+    <a href="/login">Login</a>
+  {% endif %}
+
   {% block content %} put your content here {% endblock %}
 
 </body>

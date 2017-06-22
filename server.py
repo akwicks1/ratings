@@ -48,7 +48,7 @@ def register_process():
     password = request.form.get("password")
     user_email = request.form.get("email")
 
-    if User.query.filter_by(email=user_email).first() == None:
+    if User.query.filter_by(email=user_email).first() is None:
 
         user = User(email=user_email,
                     password=password)
@@ -67,7 +67,44 @@ def login_form():
     """Display login form."""
 
     return render_template("login_form.html")
-    
+
+@app.route('/login', methods=["POST"])
+def login_in_process():
+    """Login in process."""
+
+    user_password = request.form.get("password")
+    user_email = request.form.get("email")
+
+    if User.query.filter_by(email=user_email, password=user_password).first():
+        user_id = User.query.filter_by(email=user_email).first().user_id
+        flash('Logged in.')
+        session['user_email'] = user_email
+
+        return redirect('/users/{}'.format(user_id))
+    else:
+        flash("Wrong email or password!")
+        return redirect("/login")
+
+@app.route('/logout')
+def log_out_process():
+    """Log out process."""
+
+
+    del session['user_email']
+    flash('Logged out.')
+
+    return redirect('/')
+
+@app.route('/users/<user_id>')
+def user_details(user_id):
+    """Give user details."""
+
+    user = User.query.filter_by(user_id=user_id).first()
+    # movies = Movie.query.filter_by(u)
+
+    return render_template('user_page.html',
+                            user=user)
+
 
 if __name__ == "__main__":
     # We have to set debug=True here, since it has to be True at the
