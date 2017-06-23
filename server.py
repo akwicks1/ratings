@@ -106,6 +106,48 @@ def user_details(user_id):
                             user=user)
 
 
+@app.route('/movieslist')
+def movie_list():
+    """Display movie list."""
+
+    movies = Movie.query.order_by('title').all()
+
+    return render_template('movie_list.html',
+                            movies=movies)
+
+@app.route('/movieslist/<title>')
+def show_movie_details(title):
+    """Show movie details."""
+
+    movie = Movie.query.filter_by(title=title).first()
+
+    ratings = Rating.query.filter_by(movie_id=movie.movie_id).all()
+
+    return render_template('movie_details.html',
+                            movie=movie,
+                            ratings=ratings)
+
+@app.route('/processrating', methods=["POST"])
+def process_rating():
+    """Add/Update rating."""
+
+    score = request.form.get('score')
+    movie = request.form.get('movie')
+
+    rating = Ratings.query.filter_by(movie_id == movie and user_id == session["user_id"]).first()
+    if rating:
+        rating.score = score
+    else:
+        rating = Rating(score=score,
+                       movie_id=movie_id,
+                       user_id=user_id)
+        db.session.add(rating)
+    db.session.commit()
+
+    return redirect('/movieslist')
+
+
+
 if __name__ == "__main__":
     # We have to set debug=True here, since it has to be True at the
     # point that we invoke the DebugToolbarExtension

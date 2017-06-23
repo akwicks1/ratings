@@ -1,0 +1,30 @@
+>>> Movie.query.filter_by(title='Dumbo').one().ratings
+>>> User.query.filter_by(user_id=712).first()
+<User user_id=712 email=None>
+>>> bob = 
+KeyboardInterrupt
+>>> bob = User.query.filter_by(user_id=712).first()
+>>> bob.ratings
+>>> bob.ratings[1]
+<Rating rating_id=45494 movie_id=731 user_id=712 score=5>
+>>> movie1 = bob.ratings[1].movie
+>>> movie1
+<Movie movie_id=731 title=Corrina, Corrina>
+>>> movie1.title
+u'Corrina, Corrina'
+>>> bob.email = 'bob@gmail.com'
+>>> bob.password = 'abc123'
+>>> bob
+<User user_id=712 email=bob@gmail.com>
+>>> db.session.commit()
+>>> bob
+<User user_id=712 email=bob@gmail.com>
+>>> print Movie.query.order_by('title').all() #GETS ALL MOVIES A-Z
+>>> movie = Movie.query.filter_by(title='Dumbo').first()
+>>> print movie.released_at
+1941-01-01 00:00:00
+>>> print movie.imdb_url
+http://us.imdb.com/M/title-exact?Dumbo%20(1941)
+>>> print movie.movie_id
+501
+>>> print Rating.query.filter_by(movie_id=movie.movie_id).all()

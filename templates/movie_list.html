@@ -1,0 +1,6 @@
+   {% for movie in movies %}
+    <ul>
+      <a href="/movieslist/{{ movie.title }}">
+      <li>{{ movie.title }}</li>
+    </ul>
+    {% endfor %}

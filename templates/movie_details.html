@@ -1,0 +1,27 @@
+<h2> {{ movie.title }} </h2>
+    <ul>
+    <li>{{ movie.released_at }}</li>
+    <li>{{ movie.imdb_url }}</li>
+</ul>
+
+{% for rating in ratings %}
+
+    <ul>
+        <li> {{ rating.score }} </li>
+    </ul>
+
+{% endfor %}
+
+{%if "user_email" in session%}
+<form action="/processrating" method="post">
+    <input type="hidden" value="{{ movie.movie_id }}" name="movie">
+    <select name="score">
+        <option value="1"> 1 </option>
+        <option value="2"> 2 </option>
+        <option value="3"> 3 </option>
+        <option value="4"> 4 </option>
+        <option value="5"> 5 </option>
+    </select>
+    <input type="submit"></input>
+</form>
+{% endif %}
